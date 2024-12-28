@@ -1,48 +1,43 @@
-// login.component.ts
-
 import { Component } from '@angular/core';
-import { AuthService } from '../auth.service';
-import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { RequestHandlerService } from '../services/request-handler.service';
+import { FormsModule } from '@angular/forms'; // Import FormsModule
 import { CommonModule } from '@angular/common';
+
 @Component({
   selector: 'app-login',
-  template: `
-    <form (ngSubmit)="login()">
-      <input type="text" placeholder="Username" [(ngModel)]="username">
-      <input type="password" placeholder="Password" [(ngModel)]="password">
-      <button type="submit">Login</button>
-    </form>
-  `,
   standalone: true,
-  imports: [   CommonModule  ,FormsModule],
+  imports: [ CommonModule,FormsModule],
+  providers: [
+    // Provide JwtInterceptor if needed (as a global provider)
+  ],
+  templateUrl: './login.component.html',
 })
 export class LoginComponent {
-  username = '';
-  password = '';
+  username: string = '';
+  password: string = '';
+  errorMessage: string = '';
 
-  loginForm: FormGroup;
+  constructor(
+    private requestHandlerService: RequestHandlerService,
+    private router: Router
+  ) {}
 
-  constructor(private fb: FormBuilder, private authService: AuthService,private jwtService: AuthService) {
-    this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
-    });
-  }
+  onLogin(): void {
+    const credentials = { username: this.username, password: this.password };
 
-  login() {
-    // Simulate login request (replace with actual API call)
-    const mockLoginResponse = {
-      token: 'your_actual_jwt_token_here'
-    };
-
-    if (this.username === 'validUser' && this.password === 'validPassword') {
-      // Store the received token
-      this.jwtService.storeToken(mockLoginResponse.token);
-      // Redirect to another component or page after successful login
-      // (e.g., using a Router)
-    } else {
-      // Handle login error (e.g., display an error message)
-      console.error('Invalid credentials');
-    }
+    this.requestHandlerService.post<any>('auth/login', credentials).subscribe(
+      (response) => {
+        console.log('Login successful', response);
+        // Store the token if login is successful
+        localStorage.setItem('token', response.token);
+        // Redirect to dashboard or home page
+        this.router.navigate(['/dashboard']);
+      },
+      (error) => {
+        this.errorMessage = 'Invalid username or password';
+        console.error('Login failed', error);
+      }
+    );
   }
 }

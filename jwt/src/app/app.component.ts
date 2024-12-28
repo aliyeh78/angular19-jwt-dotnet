@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
-import { LoginComponent } from './login/login.component'; // Import the LoginComponent
 
 @Component({
 
-imports: [LoginComponent],
+imports: [],
   selector: 'app-root',
   standalone: true,  // Make it standalone
-  template: `<h1>Welcome to Angular!</h1>
-  <app-login></app-login>`,
+  templateUrl: './app.component.html',
+
 })
 export class AppComponent {}
