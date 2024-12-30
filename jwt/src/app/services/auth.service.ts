@@ -19,7 +19,8 @@ export class AuthService {
 
   // Method to get the token (assuming it's stored in localStorage)
   getToken(): string | null {
-    return localStorage.getItem('token');
+    console.log("Getting token")
+    return localStorage.getItem('token')?localStorage.getItem('token'):'';
   }
 
   // Optionally, you could also add a logout method that removes the token

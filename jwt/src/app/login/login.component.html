@@ -1,12 +1,39 @@
-<form (submit)="onLogin()">
-  <div>
-    <label for="username">Username</label>
-    <input id="username" [(ngModel)]="username" name="username" type="text" required />
+
+<div class="dark-container">
+  <div id="flashlight"></div>
+  <div class="login-box  d-flex flex-column align-items-center justify-content-center">
+    <div class="card col-6 p-5">
+
+      This is Aliyeh's login
+      JWT
+
+    <h1>Login</h1>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" x
+    class="d-flex flex-column">
+      <input
+        type="email"
+        placeholder="Email"
+        class="my-3"
+        formControlName="email"
+      />
+      <div class="error" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+        <small *ngIf="loginForm.get('email')?.errors?.['required']">Email is required.</small>
+        <small *ngIf="loginForm.get('email')?.errors?.['email']">Invalid email format.</small>
+      </div>
+      <input
+      class="my-3"
+        type="password"
+        placeholder="Password"
+        formControlName="password"
+      />
+      <div class="error" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+        <small *ngIf="loginForm.get('password')?.errors?.['required']">Password is required.</small>
+        <small *ngIf="loginForm.get('password')?.errors?.['minlength']">
+          Password must be at least 6 characters.
+        </small>
+      </div>
+      <button type="submit" [disabled]="loginForm.invalid">Sign In</button>
+    </form>
   </div>
-  <div>
-    <label for="password">Password</label>
-    <input id="password" [(ngModel)]="password" name="password" type="password" required />
   </div>
-  <button type="submit">Login</button>
-  <div *ngIf="errorMessage">{{ errorMessage }}</div>
-</form>
+</div>

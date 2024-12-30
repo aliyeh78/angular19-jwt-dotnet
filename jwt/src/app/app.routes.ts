@@ -4,6 +4,6 @@ import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './services/auth.guard';
 
 export const routes: Routes = [
-  {path: '', component:AppComponent , canActivate: [AuthGuard]},
+
   {path: 'login', component:LoginComponent}
 ];
